@@ -42,9 +42,18 @@ Open up your serverless.yml file and update the provider section with your Googl
 
 # Usage
 
-## Install dependencies
+## Build and install locally
 
-    npm install
+    npm link
+
+## Setting up authentication
+
+Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to the file path of the JSON file that contains your service account key.
+
+## Commands
+
+    suggest-by-color-import-catalog --catalog https://storage.googleapis.com/suggest-by-color/lacoste/products-10.csv
+    suggest-by-color-extract-color --limit 1
 
 ## Test
 
