@@ -6,6 +6,24 @@ const datastore = new Datastore();
 // The kind for the new entity
 const kind = 'Product';
 
+exports.getProductsWithoutColor = (limit) => {
+  
+  const query = datastore
+    .createQuery(kind)
+    .filter('color', '=', null)
+    .limit(limit)
+
+  return datastore.runQuery(query)
+    .then(results => {
+      const products = results[0];
+      return products
+    })
+    .catch(err => {
+      console.error('ERROR:', err);
+    });
+  
+}
+
 /**
  * Save or update a product.
  *
@@ -28,7 +46,6 @@ exports.save = data => {
   return datastore
     .save(product)
     .then((result) => {
-      console.log(`Saved ${product.key.name}: ${product.data.photo}`)
       return product.data
     })
     .catch(err => {
