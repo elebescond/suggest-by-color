@@ -24,7 +24,7 @@
     "csvtojson": "^1.1.9",
     "debug": "^3.1.0",
     "request": "^2.83.0",
-    "sinon": "^4.2.2",
+    "rgb-hex": "^2.1.0",
     "stream-transform": "^1.0.0",
     "valid-url": "^1.0.9",
     "yargs": "^11.0.0"

@@ -1,5 +1,6 @@
 
 import Vision from '@google-cloud/vision'
+import rgbHex from 'rgb-hex';
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -8,18 +9,17 @@ import url from 'url'
 import productDao from './dao/product'
 
 
-const detectProperties = fileName => {
+const getDominantColor = fileName => {
   // Creates a client
   const client = new Vision.ImageAnnotatorClient()
 
   // Performs property detection on the local file
-  client
+  return client
     .imageProperties(fileName)
     .then(results => {
       const properties = results[0].imagePropertiesAnnotation
       const colors = properties.dominantColors.colors
-      //colors.forEach(color => console.log(color))
-      return colors[0]
+      return '#' + rgbHex(colors[0].color.red, colors[0].color.green, colors[0].color.blue)
     })
     .catch(err => {
       console.error('ERROR:', err)
@@ -29,15 +29,23 @@ const detectProperties = fileName => {
 }
 
 const detectColorByProduct = product => {
-  const parsed = url.parse(product.photo);
-  const fileName = `${os.tmpdir()}/${path.basename(parsed.pathname)}`
-  request(product.photo)
-    .pipe(fs.createWriteStream(fileName))
-  return detectProperties(fileName)
-    then(color => {
-      product.color = color
-      return productDao.save(product)
-    })
+  return new Promise((resolve, reject) => {
+    const parsed = url.parse(product.photo);
+    const fileName = `${os.tmpdir()}/${path.basename(parsed.pathname)}`
+    const writable = fs.createWriteStream(fileName)
+    request(product.photo)
+      .on('data', chunk => {
+        writable.write(chunk)
+      })
+      .on('end', () => {
+        getDominantColor(fileName)
+          .then(color => {
+            product.color = color
+            resolve(productDao.save(product))
+          })
+          .catch(reject)
+      })
+  })
 }
 
 const detectColorByProducts = products => {
