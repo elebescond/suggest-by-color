@@ -67,7 +67,7 @@ Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to the file path of 
 
 If at any point, you no longer need your service, you can run the following command to remove the Functions, Events and Resources that were created.
 
-    lerna run remote:undeploy
+    npm run remote:undeploy
 
 ## Invoke
 
