@@ -12,4 +12,4 @@ extractColor(argv.limit)
       console.log(product.id, product.color)
     });
   })
-  .catch(console.log)
+  .catch(console.error)

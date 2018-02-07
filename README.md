@@ -54,6 +54,7 @@ Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to the file path of 
 
     suggest-by-color-import-catalog --catalog https://storage.googleapis.com/suggest-by-color/lacoste/products-10.csv
     suggest-by-color-extract-color --limit 1
+    suggest-by-color --reference L1212-00-476
 
 ## Test
 
@@ -71,7 +72,7 @@ If at any point, you no longer need your service, you can run the following comm
 
 ## Invoke
 
-Run the invoke command
+Run the import command
 
     ./serverless/node_modules/serverless/bin/serverless invoke \
       --function importCatalog \
@@ -84,6 +85,12 @@ Or
       -H "Content-Type: application/json" \
       -X POST \
       http://localhost:8010/suggest-by-color/us-central1/importCatalog
+
+Run the suggest command
+
+    curl \
+      -H "Content-Type: application/json" \
+      http://localhost:8010/suggest-by-color/us-central1/suggestProduct?reference=L1212-00-476
 
 ## Emulator
 
@@ -100,12 +107,16 @@ https://cloud.google.com/functions/docs/emulator
 ### Deploy function
 
     functions deploy importCatalog --trigger-http
+    functions deploy suggestProduct --trigger-http
 
 ### Invoke
 
 
     functions call importCatalog \
       --data='{"catalog":"https://storage.googleapis.com/suggest-by-color/lacoste/products.csv"}'
+    
+    functions call suggestProduct \
+      --data='{"reference":"L1212-00-476"}'
 
 Or
 

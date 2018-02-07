@@ -15,4 +15,4 @@ importCatalog(argv.catalog)
       console.log(`${product.id} imported`)
     });
   })
-  .catch(console.log)
+  .catch(console.error)
